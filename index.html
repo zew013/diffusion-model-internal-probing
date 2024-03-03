@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>DSC180B Final Project</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.png" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+
+    
+</head>
+
+<body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="#page-top"> DSC180B B11-1 </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars ms-1"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#bg">Background</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#data">Data</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#methods-ir">Probing the</br>Network</a></li>
+<!--                     <li class="nav-item"><a class="nav-link" href="#results-ir">Results</a></li> -->
+                    <li class="nav-item"><a class="nav-link" href="#methods-ic">Classifying</br>Noisy Images</a></li>
+<!--                     <li class="nav-item"><a class="nav-link" href="#results-ic">Results</a></li> -->
+                    <li class="nav-item"><a class="nav-link" href="#future">Future Work</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#material">Material</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Masthead-->
+    <header class="masthead">
+        <div class="container">
+            <!-- <div class="masthead-heading text-uppercase">From Pixels to Pictures:</br>Understanding the Internal Representations of</br>Latent Diffusion Models</div> -->
+            <!-- <div class="masthead-heading">From Pixels to Pictures:</br>Understanding the Internal Representations of Latent Diffusion Models</div> -->
+            <div class="masthead-heading">From Pixels to Pictures:</div>
+            <div class="masthead-heading-sub">Understanding the Internal Representations<br>of Latent Diffusion Models</div>
+            <div class="masthead-subheading">Karina Chen, Atharva Kulkarni, Ester Tsai, Zelong Wang</div>
+            <a class="btn btn-primary btn-xl" href="#overview">View Work</a>
+            <!-- <br><br> -->
+            <!-- <a class="btn btn-primary" href="/assets/deliverables/report.pdf" target="_blank">Report</a>
+            <a class="btn btn-primary" href="/assets/deliverables/poster.png" target="_blank">Poster</a>
+            <a class="btn btn-primary" href="https://github.com/karinaechen/diffusion-model-internal-representation" target="_blank">Code</a> -->
+        </div>
+    </header>
+
+
+    <!-- Overview -->
+    <section class="page-section bg-light" id="overview">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Overview</h2>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-6">
+                        <h4 class="my-3">Problem Statement</h4>
+                        <p class="text-muted">
+                            It is a mystery how an LDM transforms a phrase like "car on the road" into a picture. </br>Does the LDM memorize superficial correlations between pixel values and words? 
+                           </br> Or does it learn an underlying model of objects (e.g. cars, roads) and how they are typically positioned?
+                            <ul class='text-muted'> 
+                              <li>Does an LDM create an internal 3D representation of the object it portrays in 2D? </li>
+                              <li>At what time step does an image classifier correctly detect the object? </li>
+                            </ul>
+                        </p>
+                </div>
+    
+                <div class="col-md-6">
+                        <h4 class="my-3">Contributions</h4>
+                        <p class="text-muted">
+                            Our research proves that an LDM can learn 3D properties like saliency, depth, and shading/illumination from 2D images. 
+                            Furthermore, we can modify the LDM's internal representation to reposition the object in the output image.
+                        </br></br>
+                            Performing image classification at each time step shows that ...
+                        </br></br>
+                            (Building on previous research by <a href="https://arxiv.org/pdf/2306.05720.pdf">Y. Chen et al.</a>)
+                        </p>
+                </div>
+           </div>
+        </div>
+
+    </section>
+
+    
+    <!-- Background -->
+    <section class="page-section" id="bg">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Background</h2>
+<!--                 <h3 class="section-subheading text-muted">How did this project come to be?</h3> -->
+            </div>
+            <div class="row text-center">
+                <div class="col-md-4">
+<!--                     <span class="fa-stack fa-4x">
+                        <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fa-solid fa-school fa-stack-1x fa-inverse"></i>
+                    </span> -->
+                    <h4 class="my-3">Diffusion Model</h4>
+                    <p class="text-muted">
+                        Image generators like Dall-E, Google's Imagen, Stable Diffusion, and Midjourney use diffusion models to perform formerly manual tasks like image creation, denoising, inpainting, and outpainting. 
+                        </br></br>The diffusion method consists of a forward diffusion process and a reverse process. The goal of the model is to iteratively reverse the diffusion by predicting the Gaussian noise added at each time step.
+
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h4 class="my-3">Stable Diffusion</h4>
+                    <p class="text-muted">
+                        Stable Diffusion is an open-source diffusion model that generates images from text prompts.</br>It consists of 2 stages:
+                        <ol class="text-muted">
+                          <li>Latent Diffusion Model (LDM): The LDM learns to predict and remove noise in the latent space by reversing a forward diffusion process. </li>
+                          <li>Variational Autoencoder (VAE): The VAE converts data between latent and image space. </li>
+                        </ol>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h4 class="my-3">Probe</h4>
+                    <p class="text-muted">
+                        We use probes to visualize the representation learned by the LDM. 
+                        A probe is a linear neural network that takes in the internal representation (i.e. intermediate activations) of an LDM 
+                        and outputs a predicted image showing a certain property, such as depth, saliency, or shading.
+                        We quantify the performance of a probe by measuring the Dice Coefficient or Rank Correlation between the prediction and the label images.
+                    </p>
+                </div>
+            </div>
+            <div class='text-center'>
+                     <img src='assets/img/diffusion.png' height=560 />
+                     <figcaption>
+                         Stable Diffusion 2-stage framework explained
+                     </figcaption>
+        </div>
+    </section>
+
+    <!-- Data -->
+    <section class="page-section bg-light" id="data">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Data</h2>
+            </div>
+            <div>
+                <h3> LDM Generated Image Dataset </h3>
+                <p class='text-muted'>
+                    Our diffusion image dataset consists of 617 images (512 pixels x 512 pixels) generated using Stable Diffusion v1.4. We have a CSV file that contains the prompt index, text prompt, and seed for each image. For example, the image with the prompt index 5246271, the text prompt "ZIGGY - EASY ARMCHAIR", and the seed 64140790 generated this 512 by 512 image.
+                    <br>
+                </p>
+                <div class='text-center'>
+                     <img src='assets/img/data/dataset.png' height=600 width=600 />
+                     <figcaption>(top left) 512 x 512 image generated by Stable Diffusion v1.4. <br>
+                        (top right) Salient object detection mask generated by TRACER. <br>
+                        (bottom left) Depth map generated by MiDaS. <br> 
+                        (bottom right) Shading and illumination map generated by Intrinsic.<br></figcaption>
+
+                        <br>
+                </div>
+
+                <h3> Generate Image Labels With TRACER, MiDaS, and Intrinsic </h3>
+                    <ul class='text-muted'> 
+                      <li>For salient object detection, we apply the salient object tracing model TRACER to generate a mask for each image. The masks are black and white, where white indicates the salient object, or foreground, and black indicates the background. </li>
+                      <li>For depth labels, we apply the pre-trained MiDaS model to the diffusion images to estimate their relative inverse depth maps. </li>
+                      <li>For shading labels, we apply the pre-trained Intrinsic model to the diffusion images to generate highly accurate intrinsic decompositions and estimate the shading maps.</li>
+                    </ul>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Internal Representation -->
+    <!-- Methods -->
+    <section class="page-section" id="methods-ir">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Internal Representation Methods</h2>
+                <h3 class="section-subheading text-muted">Internal representation = the neural network’s self-attention layer’s intermediate activation output.</h3>
+            </div>
+            <div class='text-center'>
+                <img src='assets/img/internal_repr/workflow.png' height=550 width=800 />
+                <figcaption>Probing Workflow<br>
+                </figcaption>
+
+                   <br>
+                   <br>
+                   <br>
+                   <br>
+                   <br>
+           </div>
+
+            <ul class="timeline">
+                <li>
+                    <!-- <div class="timeline-image"><img class="rounded-circle img-fluid" src="assets/img/about/stable_diffusion_icon.png" -->
+                        <div class="timeline-image"><img class="img-fluid" src="assets/img/about/stable_diffusion_icon.png"
+                            alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h3>Data</h3>
+                            <h5 class="subheading">Generate Images Using Stable Diffusion</h5>
+                        </div>
+                        <div class="timeline-body">
+                            <p class="text-muted">
+                                We use the open-source code provided by Stable Diffusion to generate images that are 512 pixels by 512 pixels. 
+                                Each image requires a prompt and a seed. The prompt describes what the image should portray while the seed ensures 
+                                that we will generate the same image each time for the same prompt.
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline-inverted">
+                    <div class="timeline-image"><img class="img-fluid" src="assets/img/about/tag.png"
+                            alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h3>Get Ground Truths</h3>
+                            <h5 class="subheading">Tracer, MiDaS, and Intrinsic</h5>
+                        </div>
+                        <div class="timeline-body">
+
+                            <p class="text-muted">
+                                The diffusion images we generate using Stable Diffusion v1.4 do not have ground truth
+                                labels for salient object detection, depth, or shading, so we apply off-the-shelf models to
+                                those images to synthesize the ground truth images. The labels are the same size as the
+                                diffusion images.
+                            </p>
+
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="timeline-image"><img class="img-fluid"
+                            src="assets/img/about/network.png" alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h3>Training Probes</h3>
+                            <h5 class="subheading">To Output 3D Properties</h5>
+                        </div>
+                        <div class="timeline-body">
+                            <p class="text-muted">
+                                We train the probe to predict what the mask, depth map, or shading should look like 
+                                based on the internal representation (self-attention layer output) at time step t.
+                                A different probe is trained for each block type, block, layer, and time step. 
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline-inverted">
+                    <div class="timeline-image"><img class="img-fluid" src="assets/img/about/graph.png"
+                            alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h3>Choosing the Best Probe</h3>
+                            <p class="text-muted">
+                                The probes are trained on different U-Net blocks and layers and have varying performances
+                                because of their difference in location, number of features, and output size. We
+                                choose the probe trained on Decoder 4 layer 1 because it produces the biggest outputs and
+                                achieves the highest performance metrics.
+                            </p>
+                        </div>
+                        <div class="timeline-body">
+                            <p class="text-muted"></p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="timeline-image"><img class="img-fluid" src="assets/img/about/chart.png"
+                            alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h3>Visualize the Diffusion Process</h3>
+                            <h5 class="subheading">Comparing probing results with off-the-shelf model outputs</h5>
+                        </div>
+                        <div class="timeline-body">
+                            <p class="text-muted">
+
+                                Apply the best probes for depth, salient object detection, and shading to a Stable Diffusion image's internal representation at each time step.
+                                Also apply MiDaS for depth, TRACER for salient object detection, and Intrinsic for shading to the intermediate images in the denoising process. 
+                                See the comparison in the Results section.
+
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Results-->
+    <section class="page-section bg-light" id="results-ir">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Internal Representation Results</h2>
+                <!-- <h3 class="section-subheading text-muted">Probing the LDM</h3> -->
+            </div>
+            <div>
+                <h3> Probing the LDM </h3>
+                
+                <p class='text-muted'>
+
+                    Using intermediate activations of noisy input images, linear probes can accurately predict
+                    the foreground, depth, and shading. All three properties emerge early in the denoising process
+                    (around step 3 out of 15), suggesting that the spatial layout of the generated image is determined
+                    at the very beginning of the generative process.
+
+                    <br>
+                    <table class='text-muted'>
+                        <tr>
+                          <th>Foreground segmentation Dice coefficient</th>
+                          <td>0.85</th>
+                        </tr>
+                        <tr>
+                          <th>Depth Estimation MSE</td>
+                          <td>0.47</td>
+                        </tr>
+                        <tr>
+                          <th>Shading estimation MSE</td>
+                          <td>?</td>
+                        </tr>
+                    </table>
+                    <br>
+                <div class='text-center'> <img src='assets/img/internal_repr/car_all.png' height=500 alt="diffusion, mask, depth, shading for car image"/> </div>
+
+                </p>
+            </div>
+            <br>
+            <div class="row">
+                <h3> Intervening the LDM </h3>
+                <!-- </tr>
+                </table> -->
+                <!-- <img src="assets/img/result/cm_normalized.png" class="'cm_plot" alt="..." /> -->
+                <p class="text-muted">
+                    Foreground mask has a causal role in image generation. Without changing the prompt, input latent
+                    vector, and model weights, we can modify the scene layout of generated image by editing the
+                    foreground mask (Y. Chen et  al.)
+
+                    <!-- <br> -->
+                    <div class='text-center'><img src="assets/img/internal_repr/intervention.png" width=900 alt="intervention"> </div>
+
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Classification -->
+    <section class="page-section" id="methods-ic">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Image Classification Methods</h2>
+                <!-- <h3 class="section-subheading text-muted">Internal representation = the neural network’s self-attention layer’s intermediate activation output.</h3> -->
+            </div>
+            <ul class="timeline">
+                <li>
+                    <div class="timeline-image"><img class="img-fluid" src="assets/img/about/stable_diffusion_icon.png"
+                            alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h3>Data</h3>
+                            <h5 class="subheading">Generate Images Using Stable Diffusion</h5>
+                        </div>
+                        <div class="timeline-body">
+                            <p class="text-muted">
+                                We use the open-source code provided by Stable Diffusion to generate images using prompts that match the ImageNet categories.
+                                For example, generating an image of a "tabby cat" or "lemons".
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline-inverted">
+                    <div class="timeline-image"><img class="img-fluid" src="assets/img/about/network.png"
+                            alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h3>Apply the Model</h3>
+                            <h5 class="subheading">VGG-16</h5>
+                        </div>
+                        <div class="timeline-body">
+
+                            <p class="text-muted">
+                                VGG-16 is a convolutional neural network that is trained on a subset of the ImageNet dataset. It is able to classify images 
+                                into 1000 categories. We run each intermediate image (at each timestep of the diffusion process) through VGG-16 to get a 
+                                classification.
+                            </p>
+
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="timeline-image"><img class="img-fluid"
+                            src="assets/img/about/graph.png" alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h3>Plot Results</h3>
+                            <h5 class="subheading">Explore Predictions and Plot Results</h5>
+                        </div>
+                        <div class="timeline-body">
+                            <p class="text-muted">
+                                We plot the top five predictions at each timestep against the model's corresponding confidence on that specific prediction.
+                                This reveals some interesting findings about at what timestep the model starts to correctly classify the images and some
+                                commonalities in classification.
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="page-section bg-light" id="results-ic">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Image Classification Results</h2>
+            </div>
+            <div>
+                <h3> Comparing Real and Generated Image Classifications </h3>
+                
+                <p class='text-muted'>
+
+                    Generated images: two lemons (98.75%), two oranges (94.8%) <br>
+                    Real images: singular lemon (87.7%), two lemons (99.4%), singular orange (87.0%)
+
+                </p>
+            </div>
+            <br>
+            <div class="row">
+                <h3> Classifications Throughout the Diffusion Process </h3>
+                <p class="text-muted">
+                    The correct classification has high probability (> 90%) towards the end of the diffusion
+                    process for the majority of generated images, starting from around step 12. This means that the
+                    diffused images are fairly good representations of the object prompted.
+
+                    <br>
+                    <div class='text-center'><img src="assets/img/img_class/lemon.png" width=600 alt="lemon"> <img src="assets/img/img_class/orange.png" width=600 alt="orange"></div>
+
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section" id="future">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Future Work</h2>
+                <!-- <h3 class="section-subheading text-muted">What did we learn in this project?</h3> -->
+            </div>
+            <div>                
+                <p class='text-muted' id="future-work">
+                    <ul>
+                        <li>Adversarial attacks
+                            <ul>
+                                <li>Explore where diffusion models are deployed, and examine impact of adversarial attack</li>
+                                <li>Adversarial training: train diffusion model on clean and adversarially perturbed images to find out robustness</li>
+                                <li>Using diffusion models to prevent adversarial attacks</li>
+                                <li>Adversarial attacks on diffusion models</li>
+                            </ul>
+                        </li>
+                        <li>Fairness and bias mitigation
+                            <ul>
+                                <li>Investigate methods for detecting and mitigating biases in generated images (e.g., sensitive attributes such as race, gender, age)</li>
+                                <li>Explore techniques for promoting fairness and equity in the outputs of diffusion models, such as adversarial debiasing</li>
+                            </ul>
+                        </li>
+                        <li>Augmenting datasets</li>
+                            <ul>
+                                Using the encoded depth information to explore augmenting, for example, autonomous vehicle datasets
+                            </ul>
+                    </ul>
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="page-section bg-light" id="material">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Project Material</h2>
+                <h3 class="section-subheading text-muted">Our Deliverables</h3>
+            </div>
+            <div class="row text-center">
+
+                <div class='flex-container'>
+                    <div class='flex-item'>
+                        <h4>Report</h4>
+                        <p class='text-muted'> Our published paper with more information.</p>
+                        <span class="fa-stack fa-4x">
+                            <a href="assets/deliverables/report.pdf">
+                                <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                                <i class="fas fa-newspaper fa-stack-1x fa-inverse"></i></a>
+                        </span>
+                    </div>
+
+                    <div class='flex-item'>
+
+                        <h4>Poster</h4>
+                        <p class='text-muted'>Our showcase poster for presentation.</p>
+                        <span class="fa-stack fa-4x">
+                            <a href="assets/deliverables/poster.png">
+                                <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                                <i class="fas fa-file fa-stack-1x fa-inverse"></i></a>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+    </section>
+
+    <!-- Team-->
+    <section class="page-section" id="team">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Our Team</h2>
+                <h3 class="section-subheading text-muted">Meet our Team!</h3>
+            </div>
+            <div class='flex-container'>
+                <div class="flex-item">
+                    <div class="team-member">
+                        <img class="mx-auto rounded-circle" src="assets/img/team/ester.jpg" alt="..." />
+                        <h4>Ester Tsai</h4>
+                        <p class="text-muted">UCSD '24, Data Science & Math</p>
+                        <a class="btn btn-dark btn-social mx-2" href="https://github.com/ester-tsai"
+                            aria-label="Ester Tsai Facebook Profile"><i class="fab fa-github"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="https://www.linkedin.com/in/ester-tsai"
+                            aria-label="Ester Tsai LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="mailto:tsaiester@gmail.com"
+                            aria-label="Ester Tsai Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="flex-item">
+                    <div class="team-member">
+                        <img class="mx-auto rounded-circle" src="assets/img/team/karina.jpeg" alt="karina" />
+                        <h4>Karina Chen</h4>
+                        <p class="text-muted">UCSD '24, Data Science & Design</p>
+                        <a class="btn btn-dark btn-social mx-2" href="https://github.com/karinaechen"
+                            aria-label="Karina Chen Facebook Profile"><i class="fab fa-github"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="https://www.linkedin.com/in/karina-e-chen/"
+                            aria-label="Karina Chen LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="mailto:karina.e.chen@gmail.com"
+                            aria-label="Karina Chen Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class='flex-container'>
+                <div class="flex-item">
+                    <div class="team-member">
+                        <img class="mx-auto rounded-circle" src="assets/img/team/zl.png" alt="...">
+                        <h4>Zelong Wang</h4>
+                        <p class="text-muted">UCSD '24, Data Science & Math Econ</p>
+                        <a class="btn btn-dark btn-social mx-2" href="https://github.com/zew013"
+                            aria-label="Zelong Wang Facebook Profile"><i class="fab fa-github"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="https://www.linkedin.com/in/alanwang-ucsd/"
+                            aria-label="Zelong Wang LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="mailto:zew013@ucsd.edu"
+                            aria-label="Zelong Wang Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="flex-item">
+                    <div class="team-member">
+                        <img class="mx-auto rounded-circle" src="assets/img/team/atharva.jpeg" alt="...">
+                        <h4>Atharva Kulkarni</h4>
+                        <p class="text-muted">UCSD '24, Data Science & Economics</p>
+                        <a class="btn btn-dark btn-social mx-2" href="https://github.com/tharvipop"
+                            aria-label="Atharva Kulkarni Github Profile"><i class="fab fa-github"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="https://www.linkedin.com/in/atharva-pk/"
+                            aria-label="Atharva Kulkarni LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="mailto:apkulkarni@ucsd.edu"
+                            aria-label="Atharva Kulkarni Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <!-- <div class="flex-item">
+                    <div class="team-member">
+                        <img class="mx-auto rounded-circle" src="assets/img/team/atharva.jpeg" alt="..." />
+                        <h4>Atharva Kulkarni</h4>
+                        <p class="text-muted">UCSD '24, Data Science & Economics</p>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer-->
+    <footer class="footer py-4 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 text-lg-start">Copyright &copy; Karina Chen, Atharva Kulkarni, Ester Tsai, Zelong Wang 2024</div>
+                <div class="col-lg-4 my-3 my-lg-0">
+
+                    <script>
+                        function about() {
+                            alert(
+                                'This website was made as a public-facing accompaniment to the work done by Karina Chen, Atharva Kulkarni, Ester Tsai, and Zelong Wang for the DSC180B course at UC San Diego. The website template design is borrowed from Gokul Prasad and Annie Fan. You can see the codebase for the work represented here by clicking on the GitHub icon at the bottom of the page! Thank you for visiting. '
+                            );
+                        }
+
+                    </script>
+
+                    <a class="btn btn-dark btn-social mx-2" href="https://github.com/karinaechen/diffusion-model-internal-representation"
+                        aria-label="Github"><i class="fab fa-github"></i></a>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a class="link-dark text-decoration-none me-3" href="#!" onclick="about()">About This Site</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Portfolio Modals-->
+    <!-- Portfolio item 1 modal popup-->
+    <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg"
+                        alt="Close modal" /></div>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="modal-body">
+                                <!-- Project details-->
+                                <h2 class="text-uppercase">Relevance Distribution</h2>
+                                <img class="img-fluid d-block mx-auto" src="assets/img/eda/relevance.png" alt="..." />
+                                <p class="text-muted">
+                                    The figure shows the distribution of relevant and irrelevant Tweets about China in
+                                    the original dataset. The number of 'Relevant' tweets (demarcated 'True') is over
+                                    twice the number of 'Irrelevant' Tweets, reflecting a class imbalance.
+                                </p>
+                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
+                                    type="button">
+                                    <i class="fas fa-xmark me-1"></i>
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Portfolio item 2 modal popup-->
+    <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg"
+                        alt="Close modal" /></div>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="modal-body">
+                                <!-- Project details-->
+                                <h2 class="text-uppercase">Sentiment Distribution</h2>
+                                <img class="img-fluid d-block mx-auto" src="assets/img/eda/sentiment.png" alt="..." />
+                                <p class="text-muted">
+                                    The figure shows the distribution of sentiment scores toward China in the original
+                                    dataset. The sentiment scores are in range from 1 to 5 (1 = very negative, 3 =
+                                    neutral, 5 = very positive). Tweets with sentiment score 0 and 6 are outliers. We
+                                    can see that negative Tweets, scoring < 3 are represented far more than Tweets that
+                                        score more positive. </p>
+                                        <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
+                                            type="button">
+                                            <i class="fas fa-xmark me-1"></i>
+                                            Close
+                                        </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Portfolio item 3 modal popup-->
+    <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg"
+                        alt="Close modal" /></div>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="modal-body">
+                                <!-- Project details-->
+                                <h2 class="text-uppercase">Sentiment Over Time</h2>
+                                <img class="img-fluid d-block mx-auto" src="assets/img/eda/sentiment_by_time.png"
+                                    alt="..." />
+                                <p class="text-muted">
+                                    This plot shows how the general sentiment towards China has varied across the time
+                                    period in the data (2010-20) by party. Most notably, it is nearly consistently
+                                    negative, with the Democrats in 2015 having the highest average sentiment still
+                                    falling below 3.0. This also helps to explain why negative Tweets dominate the
+                                    dataset.
+                                </p>
+
+                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
+                                    type="button">
+                                    <i class="fas fa-xmark me-1"></i>
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Portfolio item 4 modal popup-->
+    <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg"
+                        alt="Close modal" /></div>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="modal-body">
+                                <!-- Project details-->
+                                <h2 class="text-uppercase">Tweet Count by State</h2>
+                                <img class="img-fluid d-block mx-auto" src="assets/img/eda/TweetsByState.png"
+                                    alt="..." />
+                                <p class='text-muted'>
+                                    Here, we see which U.S. states are most represented in our dataset. We note that
+                                    among the most represented are the most populous -- Texas, California, Florida, etc.
+
+                                    However, we also note that there is a strong Republican presence in the dataset,
+                                    which also helps to explain the overwhelming negative Tweet count, as the Republican
+                                    party has been consistently negative in their attiude towards China across the
+                                    dataset's timeframe.
+                                </p>
+                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
+                                    type="button">
+                                    <i class="fas fa-xmark me-1"></i>
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Portfolio item 5 modal popup-->
+    <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg"
+                        alt="Close modal" /></div>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="modal-body">
+                                <!-- Project details-->
+                                <h2 class="text-uppercase">Project Name</h2>
+                                <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
+                                <img class="img-fluid d-block mx-auto" src="assets/img/portfolio/5.jpg" alt="..." />
+                                <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
+                                    repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
+                                    nostrum, reiciendis facere nemo!</p>
+                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
+                                    type="button">
+                                    <i class="fas fa-xmark me-1"></i>
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Portfolio item 6 modal popup-->
+    <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg"
+                        alt="Close modal" /></div>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="modal-body">
+                                <!-- Project details-->
+                                <h2 class="text-uppercase">Project Name</h2>
+                                <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
+                                <img class="img-fluid d-block mx-auto" src="assets/img/portfolio/6.jpg" alt="..." />
+                                <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
+                                    repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
+                                    nostrum, reiciendis facere nemo!</p>
+                                <ul class="list-inline">
+                                    <li>
+                                        <strong>Client:</strong>
+                                        Window
+                                    </li>
+                                    <li>
+                                        <strong>Category:</strong>
+                                        Photography
+                                    </li>
+                                </ul>
+                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
+                                    type="button">
+                                    <i class="fas fa-xmark me-1"></i>
+                                    Close Project
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <!-- * *                               SB Forms JS                               * *-->
+    <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+</body>
+
+</html>
