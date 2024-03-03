@@ -1,9 +1,12 @@
 # Visualizing Internal Representations in a Latent Diffusion Model
 Linear probes found controllable representations of scene attributes in a text-to-image diffusion model
 
-## Replicate
-Clone the repository with "git clone https://github.com/karinaechen/diffusion-model-internal-representation"  
-Go to the repository directory with "cd diffusion-model-internal-representation"
+# 🤔 Purpose
+This is a source repository for the public-facing website accompaniment to the DSC180B final project.
+
+Team: Karina Chen, Atharva Kulkarni, Ester Tsai, Zelong Wang.
+
+This GitHub Pages uses the **[Agency](https://startbootstrap.com/theme/agency)** theme from Bootstrap. 
 
 ### Using pip environment
 If you don't have virtualenv installed, run "pip install virtualenv"  
