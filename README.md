@@ -15,7 +15,7 @@ To activate, run "source venv/bin/activate"
 Then install the requirments in the current environment using "pip install -r requirements.txt"
 
 ## Probe Weights:
-Unzip the [probe_checkpoints.zip](https://github.com/karinaechen/diffusion-model-internal-representation/blob/main/probe_checkpoints.zip) to acquire all probe weights. The probe weights in the unzipped folder should be sufficient for you to run all experiments. 
+Unzip the [probe_checkpoints.zip](https://github.com/zew013/diffusion-model-internal-probing/blob/main/probe_checkpoints.zip) to acquire all probe weights. The probe weights in the unzipped folder should be sufficient for you to run all experiments. 
 
 ## Build Instructions
 This project stores all of the library code in .py files. The Jupyter Notebooks contain the build scripts and other crucial instructions.
