@@ -84,18 +84,38 @@
   }
 }
 
-.flex-container {
-  display: flex; /* Set display property to flex */
-  flex-direction: row; /* Set flex-direction to row */
-  align-items: center; /* Align items along the vertical center */
-  justify-content: space-between; /* Distribute items evenly along the horizontal axis */
+@media only screen and (max-device-width: 480px) {
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  .flex-item {
+    /* flex: 1; */
+    background-color: #f2f2f2;
+    padding: 10px;
+    margin: 3px;
+  }
+
+  .flex-container {
+    display: block;
+  }
 }
 
-.flex-item {
-  padding: 10px; /* Add some padding to the elements inside the flex container */
-  background-color: #f2f2f2; /* Add a background color */
-  margin: 3px; /* Add some margin around the elements */
-  flex: 1; /* Set flex property to 1 to make the items take up equal space */
+@media (min-width: 480px) {
+  .flex-container {
+    display: flex; /* Set display property to flex */
+    flex-direction: row; /* Set flex-direction to row */
+    align-items: center; /* Align items along the vertical center */
+    justify-content: space-between; /* Distribute items evenly along the horizontal axis */
+  }
+
+  .flex-item {
+    padding: 10px; /* Add some padding to the elements inside the flex container */
+    background-color: #f2f2f2; /* Add a background color */
+    margin: 3px; /* Add some margin around the elements */
+    flex: 1; /* Set flex property to 1 to make the items take up equal space */
+  }
 }
 
 .button {
@@ -359,6 +379,8 @@ table {
 
 table, th, td {
   border: 1px solid #6c757d;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 caption {
@@ -11484,6 +11506,8 @@ header.masthead {
   position: relative;
   background-color: black;
   /* height: 100vh; */
+  padding-bottom: 10%;
+  padding-top: 5%;
 }
 header.masthead::before{
   content: "";
