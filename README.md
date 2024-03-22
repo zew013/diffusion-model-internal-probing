@@ -1,6 +1,9 @@
 # Visualizing Internal Representations in a Latent Diffusion Model
 Linear probes found controllable representations of scene attributes in a text-to-image diffusion model
 
+![Poster](./assets/deliverables/poster.png)
+[Poster](./assets/deliverables/poster.pdf)
+
 # 🤔 Purpose
 This is a source repository for the public-facing website accompaniment to the DSC180B final project.
 
